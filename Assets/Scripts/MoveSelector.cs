@@ -31,6 +31,9 @@ public class MoveSelector : MonoBehaviour
 
             tileHighlight.SetActive(true);
             tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
+
+            CaptureType captureType = CaptureType.Neutral;
+
             if (Input.GetMouseButtonDown(0))
             {
                 if (!moveLocations.Contains(gridPoint))
@@ -44,13 +47,14 @@ public class MoveSelector : MonoBehaviour
                 }
                 else
                 {
-                    bool isStrongCapture = ChessGameManager.Instance.CapturePieceAt(movingPiece, gridPoint);
+                    captureType = ChessGameManager.Instance.CapturePieceAt(movingPiece, gridPoint);
                     
-                    if (isStrongCapture)
+                    if (captureType == CaptureType.Strong || captureType == CaptureType.Neutral)
+                    {
                         ChessGameManager.Instance.Move(movingPiece, gridPoint);
+                    }
                 }
-
-                ExitState();
+                ExitState(captureType == CaptureType.Strong);
             }
         }
         else
@@ -106,7 +110,7 @@ public class MoveSelector : MonoBehaviour
         }
     }
 
-    private void ExitState()
+    private void ExitState(bool canGoAgain)
     {
         enabled = false;
         tileHighlight.SetActive(false);
@@ -116,7 +120,9 @@ public class MoveSelector : MonoBehaviour
         
         movingPiece = null;
         
-        ChessGameManager.Instance.NextPlayer();
+        if (!canGoAgain)
+            ChessGameManager.Instance.NextPlayer();
+
         selector.EnterState();
         
         foreach (GameObject highlight in locationHighlights)

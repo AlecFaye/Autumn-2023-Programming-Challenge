@@ -1,6 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CaptureType
+{
+    Strong,
+    Weak,
+    Neutral
+}
+
 public class ChessGameManager : MonoBehaviour
 {
     public static ChessGameManager Instance;
@@ -138,7 +145,7 @@ public class ChessGameManager : MonoBehaviour
         return movedPawns.Contains(pawn);
     }
 
-    public bool CapturePieceAt(GameObject movingPiece, Vector2Int gridPoint)
+    public CaptureType CapturePieceAt(GameObject movingPiece, Vector2Int gridPoint)
     {
         GameObject pieceToCapture = PieceAtGrid(gridPoint);
         
@@ -153,11 +160,9 @@ public class ChessGameManager : MonoBehaviour
             // Change to strong destroy feedback
             capturedPiece.PlayDestroyPieceFeedback();
 
-            Debug.Log("Captured with strong element!");
-
             CheckKingCapture(capturedPiece);
 
-            return true;
+            return CaptureType.Strong;
         }
         else if (movedPiece.PieceElement.IsWeakAgainst(capturedPiece.PieceElement.ElementType))
         {
@@ -170,26 +175,21 @@ public class ChessGameManager : MonoBehaviour
             movedPiece.PlayDestroyPieceFeedback();
             capturedPiece.PlayDestroyPieceFeedback();
 
-            Debug.Log("Captured with weak element!");
-
             CheckKingCapture(movedPiece);
             CheckKingCapture(capturedPiece);
 
-            return false;
+            return CaptureType.Weak;
         }
         else
         {
             CurrentPlayer.CapturedPieces.Add(pieceToCapture);
             pieces[gridPoint.x, gridPoint.y] = null;
 
-            // Use normal destroy feedback
             capturedPiece.PlayDestroyPieceFeedback();
-
-            Debug.Log("Captured with same element!");
 
             CheckKingCapture(capturedPiece);
 
-            return true;
+            return CaptureType.Neutral;
         }
     }
 
