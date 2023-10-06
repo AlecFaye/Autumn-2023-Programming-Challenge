@@ -27,10 +27,10 @@ public class TileSelector : MonoBehaviour
             tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
             if (Input.GetMouseButtonDown(0))
             {
-                GameObject selectedPiece = ChessGameManager.instance.PieceAtGrid(gridPoint);
-                if (ChessGameManager.instance.DoesPieceBelongToCurrentPlayer(selectedPiece))
+                GameObject selectedPiece = ChessGameManager.Instance.PieceAtGrid(gridPoint);
+                if (ChessGameManager.Instance.DoesPieceBelongToCurrentPlayer(selectedPiece))
                 {
-                    ChessGameManager.instance.SelectPiece(selectedPiece);
+                    ChessGameManager.Instance.SelectPiece(selectedPiece);
                     ExitState(selectedPiece);
                 }
             }

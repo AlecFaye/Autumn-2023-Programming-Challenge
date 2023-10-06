@@ -12,20 +12,18 @@ public class MoveSelector : MonoBehaviour
     private List<Vector2Int> moveLocations;
     private List<GameObject> locationHighlights;
 
-    void Start()
+    private void Start()
     {
-        this.enabled = false;
-        tileHighlight = Instantiate(tileHighlightPrefab, Geometry.PointFromGrid(new Vector2Int(0, 0)),
-            Quaternion.identity, gameObject.transform);
+        enabled = false;
+        tileHighlight = Instantiate(tileHighlightPrefab, Geometry.PointFromGrid(new Vector2Int(0, 0)), Quaternion.identity, gameObject.transform);
         tileHighlight.SetActive(false);
     }
 
-    void Update()
+    private void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
             Vector3 point = hit.point;
             Vector2Int gridPoint = Geometry.GridFromPoint(point);
@@ -34,22 +32,21 @@ public class MoveSelector : MonoBehaviour
             tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
             if (Input.GetMouseButtonDown(0))
             {
-                // Reference Point 2: check for valid move location
                 if (!moveLocations.Contains(gridPoint))
                 {
                     return;
                 }
 
-                if (ChessGameManager.instance.PieceAtGrid(gridPoint) == null)
+                if (ChessGameManager.Instance.PieceAtGrid(gridPoint) == null)
                 {
-                    ChessGameManager.instance.Move(movingPiece, gridPoint);
+                    ChessGameManager.Instance.Move(movingPiece, gridPoint);
                 }
                 else
                 {
-                    ChessGameManager.instance.CapturePieceAt(gridPoint);
-                    ChessGameManager.instance.Move(movingPiece, gridPoint);
+                    ChessGameManager.Instance.CapturePieceAt(gridPoint);
+                    ChessGameManager.Instance.Move(movingPiece, gridPoint);
                 }
-                // Reference Point 3: capture enemy piece here later
+
                 ExitState();
             }
         }
@@ -61,14 +58,14 @@ public class MoveSelector : MonoBehaviour
 
     private void CancelMove()
     {
-        this.enabled = false;
+        enabled = false;
 
         foreach (GameObject highlight in locationHighlights)
         {
             Destroy(highlight);
         }
 
-        ChessGameManager.instance.DeselectPiece(movingPiece);
+        ChessGameManager.Instance.DeselectPiece(movingPiece);
         TileSelector selector = GetComponent<TileSelector>();
         selector.EnterState();
     }
@@ -76,9 +73,9 @@ public class MoveSelector : MonoBehaviour
     public void EnterState(GameObject piece)
     {
         movingPiece = piece;
-        this.enabled = true;
+        enabled = true;
 
-        moveLocations = ChessGameManager.instance.MovesForPiece(movingPiece);
+        moveLocations = ChessGameManager.Instance.MovesForPiece(movingPiece);
         locationHighlights = new List<GameObject>();
 
         if (moveLocations.Count == 0)
@@ -89,7 +86,7 @@ public class MoveSelector : MonoBehaviour
         foreach (Vector2Int loc in moveLocations)
         {
             GameObject highlight;
-            if (ChessGameManager.instance.PieceAtGrid(loc))
+            if (ChessGameManager.Instance.PieceAtGrid(loc))
             {
                 highlight = Instantiate(attackLocationPrefab, Geometry.PointFromGrid(loc), Quaternion.identity, gameObject.transform);
             }
@@ -103,13 +100,17 @@ public class MoveSelector : MonoBehaviour
 
     private void ExitState()
     {
-        this.enabled = false;
-        TileSelector selector = GetComponent<TileSelector>();
+        enabled = false;
         tileHighlight.SetActive(false);
-        ChessGameManager.instance.DeselectPiece(movingPiece);
+
+        TileSelector selector = GetComponent<TileSelector>();
+        ChessGameManager.Instance.DeselectPiece(movingPiece);
+        
         movingPiece = null;
-        ChessGameManager.instance.NextPlayer();
+        
+        ChessGameManager.Instance.NextPlayer();
         selector.EnterState();
+        
         foreach (GameObject highlight in locationHighlights)
         {
             Destroy(highlight);

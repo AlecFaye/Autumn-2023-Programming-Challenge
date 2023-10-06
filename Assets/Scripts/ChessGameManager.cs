@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ChessGameManager : MonoBehaviour
 {
-    public static ChessGameManager instance;
+    public static ChessGameManager Instance;
 
     public Board board;
 
@@ -26,12 +26,13 @@ public class ChessGameManager : MonoBehaviour
 
     private Player white;
     private Player black;
+
     public Player currentPlayer;
     public Player otherPlayer;
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     void Start()
@@ -137,7 +138,7 @@ public class ChessGameManager : MonoBehaviour
         GameObject pieceToCapture = PieceAtGrid(gridPoint);
         if (pieceToCapture.GetComponent<Piece>().type == PieceType.King)
         {
-            Debug.Log(currentPlayer.name + " wins!");
+            Debug.Log(currentPlayer.playerName + " wins!");
             Destroy(board.GetComponent<TileSelector>());
             Destroy(board.GetComponent<MoveSelector>());
         }
