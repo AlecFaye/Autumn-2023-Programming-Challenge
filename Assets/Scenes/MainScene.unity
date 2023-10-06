@@ -2929,6 +2929,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4785192122766780, guid: 7e11e78c695eeb947a2e2619a8a5c883, type: 3}
   m_PrefabInstance: {fileID: 1045719782}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1046201326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1046201328}
+  - component: {fileID: 1046201327}
+  m_Layer: 0
+  m_Name: ElementManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1046201327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046201326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c0d70de8017c544ebb9a41f578e0c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireMaterial: {fileID: 2100000, guid: b7fde420deb90e54688ea1cec7edaaf0, type: 2}
+  waterMaterial: {fileID: 2100000, guid: 6901baa4edb7d7840964a882fb504f61, type: 2}
+  earthMaterial: {fileID: 2100000, guid: b8af4aad53e5a314eaa9b9a8b0a0cabc, type: 2}
+--- !u!4 &1046201328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046201326}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1087126534
 PrefabInstance:
   m_ObjectHideFlags: 0

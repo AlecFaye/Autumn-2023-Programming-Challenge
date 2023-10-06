@@ -39,6 +39,9 @@ public class Board : MonoBehaviour
     {
         MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
 
+        if (renderers == null)
+            return;
+
         renderers.material = playerColour == PlayerColour.White
             ? defaultWhiteMaterial
             : defaultBlackMaterial;

@@ -16,6 +16,11 @@ public abstract class Piece : MonoBehaviour
 {
     [HideInInspector] public PieceType PieceType;
 
+    [Header("Element References")]
+    public Element PieceElement;
+    [SerializeField] private ElementIdentifier elementIdentifier;
+
+    [Header("Feedback References")]
     [SerializeField] private MMFeedbacks selectPieceFeedback;
     [SerializeField] private MMFeedbacks deselectPieceFeedback;
     [SerializeField] private MMFeedbacks destroyPieceFeedback;
@@ -27,6 +32,12 @@ public abstract class Piece : MonoBehaviour
     protected Vector2Int[] BishopDirections = {
         new Vector2Int(1,1), new Vector2Int(1, -1),
         new Vector2Int(-1, -1), new Vector2Int(-1, 1) };
+
+    private void Start()
+    {
+        PieceElement = ElementManager.Instance.ChooseRandomElement();
+        elementIdentifier.UpdateElementMaterial(PieceElement.ElementType);
+    }
 
     public void PlaySelectPieceFeedback()
     {

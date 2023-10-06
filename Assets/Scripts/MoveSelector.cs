@@ -44,8 +44,10 @@ public class MoveSelector : MonoBehaviour
                 }
                 else
                 {
-                    ChessGameManager.Instance.CapturePieceAt(gridPoint);
-                    ChessGameManager.Instance.Move(movingPiece, gridPoint);
+                    bool isStrongCapture = ChessGameManager.Instance.CapturePieceAt(movingPiece, gridPoint);
+                    
+                    if (isStrongCapture)
+                        ChessGameManager.Instance.Move(movingPiece, gridPoint);
                 }
 
                 ExitState();

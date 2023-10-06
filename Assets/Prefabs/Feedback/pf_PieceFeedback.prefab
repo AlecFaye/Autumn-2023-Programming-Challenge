@@ -5857,7 +5857,7 @@ MonoBehaviour:
         DebugActive: 0
         TargetGameObject: {fileID: 0}
         ExtraTargetGameObjects: []
-        Mode: 0
+        Mode: 2
 --- !u!1 &5067330371117404090
 GameObject:
   m_ObjectHideFlags: 0

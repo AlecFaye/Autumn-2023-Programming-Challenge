@@ -113,6 +113,9 @@ public class ChessGameManager : MonoBehaviour
 
     public void Move(GameObject piece, Vector2Int gridPoint)
     {
+        if (piece == null)
+            return;
+
         Piece pieceComponent = piece.GetComponent<Piece>();
         if (pieceComponent.PieceType == PieceType.Pawn && !HasPawnMoved(piece))
         {
@@ -135,22 +138,59 @@ public class ChessGameManager : MonoBehaviour
         return movedPawns.Contains(pawn);
     }
 
-    public void CapturePieceAt(Vector2Int gridPoint)
+    public bool CapturePieceAt(GameObject movingPiece, Vector2Int gridPoint)
     {
         GameObject pieceToCapture = PieceAtGrid(gridPoint);
-        Piece piece = pieceToCapture.GetComponent<Piece>();
-        if (piece.PieceType == PieceType.King)
+        
+        Piece movedPiece = movingPiece.GetComponent<Piece>();
+        Piece capturedPiece = pieceToCapture.GetComponent<Piece>();
+
+        if (movedPiece.PieceElement.IsStrongAgainst(capturedPiece.PieceElement.ElementType))
         {
-            // TODO: Display on screen
-            Debug.Log(CurrentPlayer.PlayerName + " wins!");
+            CurrentPlayer.CapturedPieces.Add(pieceToCapture);
+            pieces[gridPoint.x, gridPoint.y] = null;
 
-            Destroy(board.GetComponent<TileSelector>());
-            Destroy(board.GetComponent<MoveSelector>());
+            // Change to strong destroy feedback
+            capturedPiece.PlayDestroyPieceFeedback();
+
+            Debug.Log("Captured with strong element!");
+
+            CheckKingCapture(capturedPiece);
+
+            return true;
         }
-        CurrentPlayer.CapturedPieces.Add(pieceToCapture);
-        pieces[gridPoint.x, gridPoint.y] = null;
+        else if (movedPiece.PieceElement.IsWeakAgainst(capturedPiece.PieceElement.ElementType))
+        {
+            OtherPlayer.CapturedPieces.Add(movingPiece);
+            CurrentPlayer.CapturedPieces.Add(pieceToCapture);
 
-        piece.PlayDestroyPieceFeedback();
+            pieces[gridPoint.x, gridPoint.y] = null;
+
+            // Change to weak destroy feedback
+            movedPiece.PlayDestroyPieceFeedback();
+            capturedPiece.PlayDestroyPieceFeedback();
+
+            Debug.Log("Captured with weak element!");
+
+            CheckKingCapture(movedPiece);
+            CheckKingCapture(capturedPiece);
+
+            return false;
+        }
+        else
+        {
+            CurrentPlayer.CapturedPieces.Add(pieceToCapture);
+            pieces[gridPoint.x, gridPoint.y] = null;
+
+            // Use normal destroy feedback
+            capturedPiece.PlayDestroyPieceFeedback();
+
+            Debug.Log("Captured with same element!");
+
+            CheckKingCapture(capturedPiece);
+
+            return true;
+        }
     }
 
     public void SelectPiece(GameObject piece)
@@ -193,7 +233,7 @@ public class ChessGameManager : MonoBehaviour
         return new Vector2Int(-1, -1);
     }
 
-    public bool FriendlyPieceAt(Vector2Int gridPoint)
+    private bool FriendlyPieceAt(Vector2Int gridPoint)
     {
         GameObject piece = PieceAtGrid(gridPoint);
 
@@ -213,5 +253,17 @@ public class ChessGameManager : MonoBehaviour
     public void NextPlayer()
     {
         (OtherPlayer, CurrentPlayer) = (CurrentPlayer, OtherPlayer);
+    }
+
+    private void CheckKingCapture(Piece capturedPiece)
+    {
+        if (capturedPiece.PieceType == PieceType.King)
+        {
+            // TODO: Display on screen
+            Debug.Log(CurrentPlayer.PlayerName + " wins!");
+
+            Destroy(board.GetComponent<TileSelector>());
+            Destroy(board.GetComponent<MoveSelector>());
+        }
     }
 }
