@@ -131,8 +131,23 @@ public class ChessGameManager : MonoBehaviour
 
         Vector2Int startGridPoint = GridForPiece(piece);
         pieces[startGridPoint.x, startGridPoint.y] = null;
-        pieces[gridPoint.x, gridPoint.y] = piece;
-        board.MovePiece(piece, gridPoint);
+        if (pieceComponent.PieceType == PieceType.Pawn
+            && ((CurrentPlayer.PlayerColour == PlayerColour.White && gridPoint.y == 7)
+            || (CurrentPlayer.PlayerColour == PlayerColour.Black && gridPoint.y == 0)))
+        {
+            // TODO: Make promotion feedback
+            Destroy(piece);
+
+            if (CurrentPlayer.PlayerColour == PlayerColour.White)
+                AddPiece(whiteQueen, CurrentPlayer, gridPoint.x, gridPoint.y);
+            else
+                AddPiece(blackQueen, CurrentPlayer, gridPoint.x, gridPoint.y);
+        }
+        else
+        {
+            pieces[gridPoint.x, gridPoint.y] = piece;
+            board.MovePiece(piece, gridPoint);
+        }
     }
 
     public void PawnMoved(GameObject pawn)
