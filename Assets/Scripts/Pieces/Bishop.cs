@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class Bishop : Piece
 {
+    private void Awake()
+    {
+        PieceType = PieceType.Bishop;
+    }
+
     public override List<Vector2Int> MoveLocations(Vector2Int gridPoint)
     {
         List<Vector2Int> locations = new();

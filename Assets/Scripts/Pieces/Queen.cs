@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class Queen : Piece
 {
+    private void Awake()
+    {
+        PieceType = PieceType.Queen;
+    }
+
     public override List<Vector2Int> MoveLocations(Vector2Int gridPoint)
     {
         List<Vector2Int> locations = new();

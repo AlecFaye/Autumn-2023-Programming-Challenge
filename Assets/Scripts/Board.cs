@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    public Material defaultMaterial;
-    public Material selectedMaterial;
+    [SerializeField] private Material defaultWhiteMaterial;
+    [SerializeField] private Material defaultBlackMaterial;
+
+    [SerializeField] private Material selectedMaterial;
 
     public GameObject AddPiece(GameObject piece, int col, int row)
     {
@@ -26,11 +28,24 @@ public class Board : MonoBehaviour
     {
         MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
         renderers.material = selectedMaterial;
+
+        if (piece.TryGetComponent(out Piece pieceComponent))
+        {
+            pieceComponent.PlaySelectPieceFeedback();
+        }
     }
 
-    public void DeselectPiece(GameObject piece)
+    public void DeselectPiece(GameObject piece, PlayerColour playerColour)
     {
         MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
-        renderers.material = defaultMaterial;
+
+        renderers.material = playerColour == PlayerColour.White
+            ? defaultWhiteMaterial
+            : defaultBlackMaterial;
+
+        if (piece.TryGetComponent(out Piece pieceComponent))
+        {
+            pieceComponent.PlayDeselectPieceFeedback();
+        }
     }
 }

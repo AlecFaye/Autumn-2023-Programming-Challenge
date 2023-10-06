@@ -1,27 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerColour
+{
+    White,
+    Black
+}
+
 public class Player
 {
-    public List<GameObject> pieces;
-    public List<GameObject> capturedPieces;
+    public List<GameObject> Pieces;
+    public List<GameObject> CapturedPieces;
 
-    public string playerName;
-    public int forward;
+    public string PlayerName;
+    public int Forward;
+    public PlayerColour PlayerColour;
 
-    public Player(string playerName, bool positiveZMovement)
+    public Player(string playerName, bool positiveZMovement, PlayerColour playerColour)
     {
-        this.playerName = playerName;
-        pieces = new List<GameObject>();
-        capturedPieces = new List<GameObject>();
+        PlayerName = playerName;
+        PlayerColour = playerColour;
 
-        if (positiveZMovement == true)
-        {
-            forward = 1;
-        }
-        else
-        {
-            forward = -1;
-        }
+        Pieces = new();
+        CapturedPieces = new();
+
+        Forward = positiveZMovement 
+            ? 1 
+            : -1;
     }
 }

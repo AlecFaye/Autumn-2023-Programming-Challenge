@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TileSelector : MonoBehaviour
 {
-    public GameObject tileHighlightPrefab;
+    [SerializeField] private GameObject tileHighlightPrefab;
 
     private GameObject tileHighlight;
 

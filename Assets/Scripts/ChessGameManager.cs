@@ -5,21 +5,23 @@ public class ChessGameManager : MonoBehaviour
 {
     public static ChessGameManager Instance;
 
-    public Board board;
+    [SerializeField] private Board board;
 
-    public GameObject whiteKing;
-    public GameObject whiteQueen;
-    public GameObject whiteBishop;
-    public GameObject whiteKnight;
-    public GameObject whiteRook;
-    public GameObject whitePawn;
+    [Header("White Pieces")]
+    [SerializeField] private GameObject whiteKing;
+    [SerializeField] private GameObject whiteQueen;
+    [SerializeField] private GameObject whiteBishop;
+    [SerializeField] private GameObject whiteKnight;
+    [SerializeField] private GameObject whiteRook;
+    [SerializeField] private GameObject whitePawn;
 
-    public GameObject blackKing;
-    public GameObject blackQueen;
-    public GameObject blackBishop;
-    public GameObject blackKnight;
-    public GameObject blackRook;
-    public GameObject blackPawn;
+    [Header("Black Pieces")]
+    [SerializeField] private GameObject blackKing;
+    [SerializeField] private GameObject blackQueen;
+    [SerializeField] private GameObject blackBishop;
+    [SerializeField] private GameObject blackKnight;
+    [SerializeField] private GameObject blackRook;
+    [SerializeField] private GameObject blackPawn;
 
     private GameObject[,] pieces;
     private List<GameObject> movedPawns;
@@ -27,8 +29,8 @@ public class ChessGameManager : MonoBehaviour
     private Player white;
     private Player black;
 
-    public Player currentPlayer;
-    public Player otherPlayer;
+    public Player CurrentPlayer;
+    public Player OtherPlayer;
 
     void Awake()
     {
@@ -40,11 +42,11 @@ public class ChessGameManager : MonoBehaviour
         pieces = new GameObject[8, 8];
         movedPawns = new List<GameObject>();
 
-        white = new("white", true);
-        black = new("black", false);
+        white = new("White", true, PlayerColour.White);
+        black = new("Black", false, PlayerColour.Black);
 
-        currentPlayer = white;
-        otherPlayer = black;
+        CurrentPlayer = white;
+        OtherPlayer = black;
 
         InitialSetup();
     }
@@ -83,7 +85,7 @@ public class ChessGameManager : MonoBehaviour
     public void AddPiece(GameObject prefab, Player player, int col, int row)
     {
         GameObject pieceObject = board.AddPiece(prefab, col, row);
-        player.pieces.Add(pieceObject);
+        player.Pieces.Add(pieceObject);
         pieces[col, row] = pieceObject;
     }
 
@@ -112,7 +114,7 @@ public class ChessGameManager : MonoBehaviour
     public void Move(GameObject piece, Vector2Int gridPoint)
     {
         Piece pieceComponent = piece.GetComponent<Piece>();
-        if (pieceComponent.type == PieceType.Pawn && !HasPawnMoved(piece))
+        if (pieceComponent.PieceType == PieceType.Pawn && !HasPawnMoved(piece))
         {
             movedPawns.Add(piece);
         }
@@ -136,15 +138,17 @@ public class ChessGameManager : MonoBehaviour
     public void CapturePieceAt(Vector2Int gridPoint)
     {
         GameObject pieceToCapture = PieceAtGrid(gridPoint);
-        if (pieceToCapture.GetComponent<Piece>().type == PieceType.King)
+        Piece piece = pieceToCapture.GetComponent<Piece>();
+        if (piece.PieceType == PieceType.King)
         {
-            Debug.Log(currentPlayer.playerName + " wins!");
+            Debug.Log(CurrentPlayer.PlayerName + " wins!");
             Destroy(board.GetComponent<TileSelector>());
             Destroy(board.GetComponent<MoveSelector>());
         }
-        currentPlayer.capturedPieces.Add(pieceToCapture);
+        CurrentPlayer.CapturedPieces.Add(pieceToCapture);
         pieces[gridPoint.x, gridPoint.y] = null;
-        Destroy(pieceToCapture);
+
+        piece.PlayDestroyPieceFeedback();
     }
 
     public void SelectPiece(GameObject piece)
@@ -154,12 +158,12 @@ public class ChessGameManager : MonoBehaviour
 
     public void DeselectPiece(GameObject piece)
     {
-        board.DeselectPiece(piece);
+        board.DeselectPiece(piece, CurrentPlayer.PlayerColour);
     }
 
     public bool DoesPieceBelongToCurrentPlayer(GameObject piece)
     {
-        return currentPlayer.pieces.Contains(piece);
+        return CurrentPlayer.Pieces.Contains(piece);
     }
 
     public GameObject PieceAtGrid(Vector2Int gridPoint)
@@ -196,7 +200,7 @@ public class ChessGameManager : MonoBehaviour
             return false;
         }
 
-        if (otherPlayer.pieces.Contains(piece))
+        if (OtherPlayer.Pieces.Contains(piece))
         {
             return false;
         }
@@ -206,8 +210,6 @@ public class ChessGameManager : MonoBehaviour
 
     public void NextPlayer()
     {
-        Player tempPlayer = currentPlayer;
-        currentPlayer = otherPlayer;
-        otherPlayer = tempPlayer;
+        (OtherPlayer, CurrentPlayer) = (CurrentPlayer, OtherPlayer);
     }
 }

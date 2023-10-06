@@ -3,11 +3,16 @@ using UnityEngine;
 
 public class Pawn : Piece
 {
+    private void Awake()
+    {
+        PieceType = PieceType.Pawn;
+    }
+
     public override List<Vector2Int> MoveLocations(Vector2Int gridPoint)
     {
         List<Vector2Int> locations = new();
 
-        int forwardDirection = ChessGameManager.Instance.currentPlayer.forward;
+        int forwardDirection = ChessGameManager.Instance.CurrentPlayer.Forward;
 
         Vector2Int forwardOne = new(gridPoint.x, gridPoint.y + forwardDirection);
         if (ChessGameManager.Instance.PieceAtGrid(forwardOne) == false)
@@ -16,7 +21,9 @@ public class Pawn : Piece
         }
 
         Vector2Int forwardTwo = new(gridPoint.x, gridPoint.y + 2 * forwardDirection);
-        if (ChessGameManager.Instance.HasPawnMoved(gameObject) == false && ChessGameManager.Instance.PieceAtGrid(forwardTwo) == false)
+        if (ChessGameManager.Instance.HasPawnMoved(gameObject) == false
+            && ChessGameManager.Instance.PieceAtGrid(forwardOne) == false
+            && ChessGameManager.Instance.PieceAtGrid(forwardTwo) == false)
         {
             locations.Add(forwardTwo);
         }

@@ -1,14 +1,16 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MoveSelector : MonoBehaviour
 {
-    public GameObject moveLocationPrefab;
-    public GameObject tileHighlightPrefab;
-    public GameObject attackLocationPrefab;
+    [SerializeField] private GameObject moveLocationPrefab;
+    [SerializeField] private GameObject tileHighlightPrefab;
+    [SerializeField] private GameObject attackLocationPrefab;
 
     private GameObject tileHighlight;
     private GameObject movingPiece;
+
     private List<Vector2Int> moveLocations;
     private List<GameObject> locationHighlights;
 
@@ -53,6 +55,11 @@ public class MoveSelector : MonoBehaviour
         else
         {
             tileHighlight.SetActive(false);
+        }
+
+        if (Input.GetMouseButtonDown(1) && movingPiece != null)
+        {
+            CancelMove();
         }
     }
 
