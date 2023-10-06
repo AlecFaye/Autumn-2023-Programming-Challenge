@@ -1766,8 +1766,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveLocationPrefab: {fileID: 4146454402964510214, guid: 7ce5a46fc8e1f6241bdfc7c9f3609026, type: 3}
-  tileHighlightPrefab: {fileID: 4146454402964510214, guid: 26ecfa1d03b2b0e4ba4555524144186a, type: 3}
-  attackLocationPrefab: {fileID: 4146454402964510214, guid: e3f9a06bf8e424446b19767a41a73f6b, type: 3}
+  tileHighlightPrefab: {fileID: 4146454402964510214, guid: c0a599d5206f5684daf0d0bd53c1032c, type: 3}
+  attackLocationPrefab: {fileID: 4146454402964510214, guid: a90cce7a422eb4945ac3b270d6a56f74, type: 3}
 --- !u!114 &688655038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1780,7 +1780,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1686b456d86cb124abe85913be538da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileHighlightPrefab: {fileID: 4146454402964510214, guid: 26ecfa1d03b2b0e4ba4555524144186a, type: 3}
+  tileHighlightPrefab: {fileID: 4146454402964510214, guid: c0a599d5206f5684daf0d0bd53c1032c, type: 3}
 --- !u!1001 &690413460
 PrefabInstance:
   m_ObjectHideFlags: 0

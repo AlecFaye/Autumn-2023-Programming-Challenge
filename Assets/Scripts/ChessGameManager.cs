@@ -141,7 +141,9 @@ public class ChessGameManager : MonoBehaviour
         Piece piece = pieceToCapture.GetComponent<Piece>();
         if (piece.PieceType == PieceType.King)
         {
+            // TODO: Display on screen
             Debug.Log(CurrentPlayer.PlayerName + " wins!");
+
             Destroy(board.GetComponent<TileSelector>());
             Destroy(board.GetComponent<MoveSelector>());
         }
