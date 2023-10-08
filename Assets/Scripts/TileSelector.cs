@@ -6,15 +6,30 @@ public class TileSelector : MonoBehaviour
 
     private GameObject tileHighlight;
 
+    #region Pipeline Functions
+
     void Start()
+    {
+        InitTileHighlight();
+    }
+
+    void Update()
+    {
+        MoveTileHighlight();
+    }
+
+    #endregion
+
+    private void InitTileHighlight()
     {
         Vector2Int gridPoint = Geometry.GridPoint(0, 0);
         Vector3 point = Geometry.PointFromGrid(gridPoint);
+
         tileHighlight = Instantiate(tileHighlightPrefab, point, Quaternion.identity, gameObject.transform);
         tileHighlight.SetActive(false);
     }
 
-    void Update()
+    private void MoveTileHighlight()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

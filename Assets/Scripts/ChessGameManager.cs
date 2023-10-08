@@ -10,7 +10,7 @@ public enum CaptureType
 
 public class ChessGameManager : MonoBehaviour
 {
-    public static ChessGameManager Instance;
+    public static ChessGameManager Instance { get; private set; }
 
     [SerializeField] private Board board;
 
@@ -39,27 +39,37 @@ public class ChessGameManager : MonoBehaviour
     public Player CurrentPlayer;
     public Player OtherPlayer;
 
-    void Awake()
+    #region Pipeline Functions
+
+    private void Awake()
     {
         Instance = this;
     }
 
-    void Start()
+    private void Start()
     {
-        pieces = new GameObject[8, 8];
-        movedPawns = new List<GameObject>();
+        InitPlayer();
+        InitPieces();
+    }
 
+    #endregion
+
+    #region Initialization Functions
+
+    private void InitPlayer()
+    {
         white = new("White", true, PlayerColour.White);
         black = new("Black", false, PlayerColour.Black);
 
         CurrentPlayer = white;
         OtherPlayer = black;
-
-        InitialSetup();
     }
 
-    private void InitialSetup()
+    private void InitPieces()
     {
+        pieces = new GameObject[8, 8];
+        movedPawns = new List<GameObject>();
+
         AddPiece(whiteRook, white, 0, 0);
         AddPiece(whiteKnight, white, 1, 0);
         AddPiece(whiteBishop, white, 2, 0);
@@ -89,20 +99,18 @@ public class ChessGameManager : MonoBehaviour
         }
     }
 
-    public void AddPiece(GameObject prefab, Player player, int col, int row)
+    #endregion
+
+    #region Movement Functions
+
+    public void SelectPiece(GameObject piece)
     {
-        GameObject pieceObject = board.AddPiece(prefab, col, row);
-        player.Pieces.Add(pieceObject);
-        pieces[col, row] = pieceObject;
+        board.SelectPiece(piece);
     }
 
-    public void SelectPieceAtGrid(Vector2Int gridPoint)
+    public void DeselectPiece(GameObject piece)
     {
-        GameObject selectedPiece = pieces[gridPoint.x, gridPoint.y];
-        if (selectedPiece)
-        {
-            board.SelectPiece(selectedPiece);
-        }
+        board.DeselectPiece(piece, CurrentPlayer.PlayerColour);
     }
 
     public List<Vector2Int> MovesForPiece(GameObject pieceObject)
@@ -131,6 +139,7 @@ public class ChessGameManager : MonoBehaviour
 
         Vector2Int startGridPoint = GridForPiece(piece);
         pieces[startGridPoint.x, startGridPoint.y] = null;
+
         if (pieceComponent.PieceType == PieceType.Pawn
             && ((CurrentPlayer.PlayerColour == PlayerColour.White && gridPoint.y == 7)
             || (CurrentPlayer.PlayerColour == PlayerColour.Black && gridPoint.y == 0)))
@@ -148,11 +157,6 @@ public class ChessGameManager : MonoBehaviour
             pieces[gridPoint.x, gridPoint.y] = piece;
             board.MovePiece(piece, gridPoint);
         }
-    }
-
-    public void PawnMoved(GameObject pawn)
-    {
-        movedPawns.Add(pawn);
     }
 
     public bool HasPawnMoved(GameObject pawn)
@@ -208,15 +212,9 @@ public class ChessGameManager : MonoBehaviour
         }
     }
 
-    public void SelectPiece(GameObject piece)
-    {
-        board.SelectPiece(piece);
-    }
+    #endregion
 
-    public void DeselectPiece(GameObject piece)
-    {
-        board.DeselectPiece(piece, CurrentPlayer.PlayerColour);
-    }
+    #region Helper Functions
 
     public bool DoesPieceBelongToCurrentPlayer(GameObject piece)
     {
@@ -248,6 +246,32 @@ public class ChessGameManager : MonoBehaviour
         return new Vector2Int(-1, -1);
     }
 
+    public void NextPlayer()
+    {
+        (OtherPlayer, CurrentPlayer) = (CurrentPlayer, OtherPlayer);
+
+        PlayerTurnUI.Instance.UpdateTurnUI(CurrentPlayer.PlayerColour);
+    }
+
+    private void CheckKingCapture(Piece capturedPiece)
+    {
+        if (capturedPiece.PieceType == PieceType.King)
+        {
+            // TODO: Display on screen
+            Debug.Log(CurrentPlayer.PlayerName + " wins!");
+
+            Destroy(board.GetComponent<TileSelector>());
+            Destroy(board.GetComponent<MoveSelector>());
+        }
+    }
+
+    private void AddPiece(GameObject prefab, Player player, int col, int row)
+    {
+        GameObject pieceObject = board.AddPiece(prefab, col, row);
+        player.Pieces.Add(pieceObject);
+        pieces[col, row] = pieceObject;
+    }
+
     private bool FriendlyPieceAt(Vector2Int gridPoint)
     {
         GameObject piece = PieceAtGrid(gridPoint);
@@ -265,20 +289,5 @@ public class ChessGameManager : MonoBehaviour
         return true;
     }
 
-    public void NextPlayer()
-    {
-        (OtherPlayer, CurrentPlayer) = (CurrentPlayer, OtherPlayer);
-    }
-
-    private void CheckKingCapture(Piece capturedPiece)
-    {
-        if (capturedPiece.PieceType == PieceType.King)
-        {
-            // TODO: Display on screen
-            Debug.Log(CurrentPlayer.PlayerName + " wins!");
-
-            Destroy(board.GetComponent<TileSelector>());
-            Destroy(board.GetComponent<MoveSelector>());
-        }
-    }
+    #endregion
 }

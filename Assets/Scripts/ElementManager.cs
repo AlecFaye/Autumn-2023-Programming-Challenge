@@ -8,6 +8,8 @@ public class ElementManager : MonoBehaviour
     [SerializeField] private Material fireMaterial;
     [SerializeField] private Material waterMaterial;
     [SerializeField] private Material earthMaterial;
+    [SerializeField] private Material lightMaterial;
+    [SerializeField] private Material darkMaterial;
 
     private readonly Dictionary<ElementType, Material> elementMaterials = new();
     private readonly List<Element> elements = new();
@@ -36,10 +38,14 @@ public class ElementManager : MonoBehaviour
         Element fireElement = new(ElementType.Fire, ElementType.Earth, ElementType.Water);
         Element waterElement = new(ElementType.Water, ElementType.Fire, ElementType.Earth);
         Element earthElement = new(ElementType.Earth, ElementType.Water, ElementType.Fire);
+        Element lightElement = new(ElementType.Light, ElementType.Dark, ElementType.Light);
+        Element darkElement = new(ElementType.Dark, ElementType.Light, ElementType.Dark);
 
         elements.Add(fireElement);
         elements.Add(waterElement);
         elements.Add(earthElement);
+        elements.Add(lightElement);
+        elements.Add(darkElement);
     }
 
     private void InitElementMaterials()
@@ -47,5 +53,7 @@ public class ElementManager : MonoBehaviour
         elementMaterials.Add(ElementType.Fire, fireMaterial);
         elementMaterials.Add(ElementType.Water, waterMaterial);
         elementMaterials.Add(ElementType.Earth, earthMaterial);
+        elementMaterials.Add(ElementType.Light, lightMaterial);
+        elementMaterials.Add(ElementType.Dark, darkMaterial);
     }
 }

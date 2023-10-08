@@ -17,7 +17,6 @@ public abstract class Piece : MonoBehaviour
     [HideInInspector] public PieceType PieceType;
 
     [Header("Element References")]
-    public Element PieceElement;
     [SerializeField] private ElementIdentifier elementIdentifier;
 
     [Header("Feedback References")]
@@ -33,10 +32,13 @@ public abstract class Piece : MonoBehaviour
         new Vector2Int(1,1), new Vector2Int(1, -1),
         new Vector2Int(-1, -1), new Vector2Int(-1, 1) };
 
+    private Element pieceElement;
+    public Element PieceElement => pieceElement;
+
     private void Start()
     {
-        PieceElement = ElementManager.Instance.ChooseRandomElement();
-        elementIdentifier.UpdateElementMaterial(PieceElement.ElementType);
+        pieceElement = ElementManager.Instance.ChooseRandomElement();
+        elementIdentifier.UpdateElementMaterial(pieceElement.ElementType);
     }
 
     public void PlaySelectPieceFeedback()
