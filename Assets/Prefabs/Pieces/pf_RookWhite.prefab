@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PieceType: 0
-  elementIdentifier: {fileID: 6714016522350819432}
+  elementMaterialIdentifier: {fileID: 6714016522350819432}
   selectPieceFeedback: {fileID: 7780756648710706972}
   deselectPieceFeedback: {fileID: 3880893474417427119}
   destroyPieceFeedback: {fileID: 1974287861700476029}

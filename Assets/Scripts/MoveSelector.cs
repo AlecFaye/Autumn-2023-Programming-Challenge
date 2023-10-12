@@ -1,11 +1,16 @@
+using MoreMountains.Feedbacks;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveSelector : MonoBehaviour
 {
+    [Header("Tile Colour Prefabs")]
     [SerializeField] private GameObject moveLocationPrefab;
     [SerializeField] private GameObject tileHighlightPrefab;
     [SerializeField] private GameObject attackLocationPrefab;
+
+    [Header("Feedback")]
+    [SerializeField] private MMFeedbacks normalMovementFeedback;
 
     private GameObject tileHighlight;
     private GameObject movingPiece;
@@ -44,6 +49,11 @@ public class MoveSelector : MonoBehaviour
                 if (ChessGameManager.Instance.PieceAtGrid(gridPoint) == null)
                 {
                     ChessGameManager.Instance.Move(movingPiece, gridPoint);
+
+                    if (normalMovementFeedback != null)
+                    {
+                        normalMovementFeedback.PlayFeedbacks();
+                    }    
                 }
                 else
                 {
@@ -77,6 +87,7 @@ public class MoveSelector : MonoBehaviour
             Destroy(highlight);
         }
 
+        tileHighlight.SetActive(false);
         ChessGameManager.Instance.DeselectPiece(movingPiece);
         TileSelector selector = GetComponent<TileSelector>();
         selector.EnterState();

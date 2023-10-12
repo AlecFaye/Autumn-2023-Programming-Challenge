@@ -176,8 +176,9 @@ public class ChessGameManager : MonoBehaviour
             CurrentPlayer.CapturedPieces.Add(pieceToCapture);
             pieces[gridPoint.x, gridPoint.y] = null;
 
-            // Change to strong destroy feedback
+            movedPiece.PlayElementalFeedback();
             capturedPiece.PlayDestroyPieceFeedback();
+            StrengthFeedbackManager.Instance.PlayStrongFeedback();
 
             CheckKingCapture(capturedPiece);
 
@@ -190,12 +191,13 @@ public class ChessGameManager : MonoBehaviour
 
             pieces[gridPoint.x, gridPoint.y] = null;
 
-            // Change to weak destroy feedback
+            movedPiece.PlayElementalFeedback();
             movedPiece.PlayDestroyPieceFeedback();
             capturedPiece.PlayDestroyPieceFeedback();
+            StrengthFeedbackManager.Instance.PlayWeakFeedback();
 
-            CheckKingCapture(movedPiece);
             CheckKingCapture(capturedPiece);
+            CheckKingCapture(movedPiece);
 
             return CaptureType.Weak;
         }
@@ -204,7 +206,9 @@ public class ChessGameManager : MonoBehaviour
             CurrentPlayer.CapturedPieces.Add(pieceToCapture);
             pieces[gridPoint.x, gridPoint.y] = null;
 
+            movedPiece.PlayElementalFeedback();
             capturedPiece.PlayDestroyPieceFeedback();
+            StrengthFeedbackManager.Instance.PlayNeutralFeedback();
 
             CheckKingCapture(capturedPiece);
 

@@ -17,12 +17,15 @@ public abstract class Piece : MonoBehaviour
     [HideInInspector] public PieceType PieceType;
 
     [Header("Element References")]
-    [SerializeField] private ElementIdentifier elementIdentifier;
+    [SerializeField] private ElementMaterialIdentifier elementMaterialIdentifier;
 
-    [Header("Feedback References")]
+    [Header("Piece Feedback References")]
     [SerializeField] private MMFeedbacks selectPieceFeedback;
     [SerializeField] private MMFeedbacks deselectPieceFeedback;
     [SerializeField] private MMFeedbacks destroyPieceFeedback;
+
+    private Element pieceElement;
+    public Element PieceElement => pieceElement;
 
     protected Vector2Int[] RookDirections = {
         new Vector2Int(0,1), new Vector2Int(1, 0),
@@ -32,13 +35,9 @@ public abstract class Piece : MonoBehaviour
         new Vector2Int(1,1), new Vector2Int(1, -1),
         new Vector2Int(-1, -1), new Vector2Int(-1, 1) };
 
-    private Element pieceElement;
-    public Element PieceElement => pieceElement;
-
     private void Start()
     {
-        pieceElement = ElementManager.Instance.ChooseRandomElement();
-        elementIdentifier.UpdateElementMaterial(pieceElement.ElementType);
+        ChooseAndUpdateElement();
     }
 
     public void PlaySelectPieceFeedback()
@@ -59,5 +58,16 @@ public abstract class Piece : MonoBehaviour
             destroyPieceFeedback.PlayFeedbacks();
     }
 
+    public void PlayElementalFeedback()
+    {
+        ElementManager.Instance.PlayElementalFeedback(pieceElement.ElementType, transform.position);
+    }
+
     public abstract List<Vector2Int> MoveLocations(Vector2Int gridPoint);
+
+    private void ChooseAndUpdateElement()
+    {
+        pieceElement = ElementManager.Instance.ChooseRandomElement();
+        elementMaterialIdentifier.UpdateElementMaterial(pieceElement.ElementType);
+    }
 }
