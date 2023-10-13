@@ -80,7 +80,7 @@ namespace ReadmeSystem.Editor
             }
             else
             {
-                Debug.LogWarning("Couldn't find a readme");
+                //Debug.LogWarning("Couldn't find a readme");
             }
 
             return result;

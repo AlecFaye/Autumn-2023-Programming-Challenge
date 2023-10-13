@@ -144,7 +144,7 @@ public class ChessGameManager : MonoBehaviour
             && ((CurrentPlayer.PlayerColour == PlayerColour.White && gridPoint.y == 7)
             || (CurrentPlayer.PlayerColour == PlayerColour.Black && gridPoint.y == 0)))
         {
-            // TODO: Make promotion feedback
+            PromotionFeedback.Instance.PlayPromotionFeedback();
             Destroy(piece);
 
             if (CurrentPlayer.PlayerColour == PlayerColour.White)
