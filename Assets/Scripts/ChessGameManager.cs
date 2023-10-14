@@ -31,7 +31,7 @@ public class ChessGameManager : MonoBehaviour
     [SerializeField] private GameObject blackPawn;
 
     private GameObject[,] pieces;
-    private List<GameObject> movedPawns;
+    private List<GameObject> movedPieces;
 
     private Player white;
     private Player black;
@@ -68,7 +68,7 @@ public class ChessGameManager : MonoBehaviour
     private void InitPieces()
     {
         pieces = new GameObject[8, 8];
-        movedPawns = new List<GameObject>();
+        movedPieces = new List<GameObject>();
 
         AddPiece(whiteRook, white, 0, 0);
         AddPiece(whiteKnight, white, 1, 0);
@@ -132,9 +132,9 @@ public class ChessGameManager : MonoBehaviour
             return;
 
         Piece pieceComponent = piece.GetComponent<Piece>();
-        if (pieceComponent.PieceType == PieceType.Pawn && !HasPawnMoved(piece))
+        if (pieceComponent.PieceType == PieceType.Pawn && !HasPieceMoved(piece))
         {
-            movedPawns.Add(piece);
+            movedPieces.Add(piece);
         }
 
         Vector2Int startGridPoint = GridForPiece(piece);
@@ -159,9 +159,9 @@ public class ChessGameManager : MonoBehaviour
         }
     }
 
-    public bool HasPawnMoved(GameObject pawn)
+    public bool HasPieceMoved(GameObject piece)
     {
-        return movedPawns.Contains(pawn);
+        return movedPieces.Contains(piece);
     }
 
     public CaptureType CapturePieceAt(GameObject movingPiece, Vector2Int gridPoint)

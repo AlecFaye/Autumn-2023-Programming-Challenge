@@ -21,7 +21,7 @@ public class Pawn : Piece
         }
 
         Vector2Int forwardTwo = new(gridPoint.x, gridPoint.y + 2 * forwardDirection);
-        if (ChessGameManager.Instance.HasPawnMoved(gameObject) == false
+        if (ChessGameManager.Instance.HasPieceMoved(gameObject) == false
             && ChessGameManager.Instance.PieceAtGrid(forwardOne) == false
             && ChessGameManager.Instance.PieceAtGrid(forwardTwo) == false)
         {
