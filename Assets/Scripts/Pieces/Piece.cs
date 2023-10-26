@@ -28,11 +28,11 @@ public abstract class Piece : MonoBehaviour
     public Element PieceElement => pieceElement;
 
     protected Vector2Int[] RookDirections = {
-        new Vector2Int(0,1), new Vector2Int(1, 0),
+        new Vector2Int(0, 1), new Vector2Int(1, 0),
         new Vector2Int(0, -1), new Vector2Int(-1, 0) };
 
     protected Vector2Int[] BishopDirections = {
-        new Vector2Int(1,1), new Vector2Int(1, -1),
+        new Vector2Int(1, 1), new Vector2Int(1, -1),
         new Vector2Int(-1, -1), new Vector2Int(-1, 1) };
 
     private void Start()

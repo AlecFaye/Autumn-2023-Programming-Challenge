@@ -13,7 +13,7 @@ public class MoveSelector : MonoBehaviour
     [SerializeField] private MMFeedbacks normalMovementFeedback;
 
     private GameObject tileHighlight;
-    private GameObject movingPiece;
+    private Piece movingPiece;
 
     private List<Vector2Int> moveLocations;
     private List<GameObject> locationHighlights;
@@ -93,7 +93,7 @@ public class MoveSelector : MonoBehaviour
         selector.EnterState();
     }
 
-    public void EnterState(GameObject piece)
+    public void EnterState(Piece piece)
     {
         movingPiece = piece;
         enabled = true;

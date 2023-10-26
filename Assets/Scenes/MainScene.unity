@@ -12801,18 +12801,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 688655036}
-  whiteKing: {fileID: 4463562005343443255, guid: 3c93ee8a1957e4243a1bb32385eb686e, type: 3}
-  whiteQueen: {fileID: 4463562005343443255, guid: 169592bd78c157d4eb68a7d8f2d83cfd, type: 3}
-  whiteBishop: {fileID: 4463562005343443255, guid: 3f168f38bd121bf44a6ea499b5154d83, type: 3}
-  whiteKnight: {fileID: 4463562005343443255, guid: ebf626c42922d3e4fb3e3af80284b679, type: 3}
-  whiteRook: {fileID: 4463562005343443255, guid: 4fe27c3ca637cea4d868cbe3782e321b, type: 3}
-  whitePawn: {fileID: 4463562005343443255, guid: 88475c2efa1afa94888d4f24c18382b4, type: 3}
-  blackKing: {fileID: 4463562005343443255, guid: b51397d41d7a2014c91df38d1c93952c, type: 3}
-  blackQueen: {fileID: 4463562005343443255, guid: 0d7cc4c1107e5b54a8cc6338d7de7410, type: 3}
-  blackBishop: {fileID: 4463562005343443255, guid: 759ef8fc24bfe4547beaef51f32ede9f, type: 3}
-  blackKnight: {fileID: 4463562005343443255, guid: 95b20e2c2d967cc4fb1824f7d03b4411, type: 3}
-  blackRook: {fileID: 4463562005343443255, guid: 1bcfdc688723a4242b9518a09b0d0437, type: 3}
-  blackPawn: {fileID: 4463562005343443255, guid: be2146af9e8b64e4abcc733259a374e1, type: 3}
+  whiteKing: {fileID: 3661858467491189900, guid: 3c93ee8a1957e4243a1bb32385eb686e, type: 3}
+  whiteQueen: {fileID: 5671412475919609640, guid: 169592bd78c157d4eb68a7d8f2d83cfd, type: 3}
+  whiteBishop: {fileID: -5287723917377354158, guid: 3f168f38bd121bf44a6ea499b5154d83, type: 3}
+  whiteKnight: {fileID: -6403488389759370221, guid: ebf626c42922d3e4fb3e3af80284b679, type: 3}
+  whiteRook: {fileID: -8026845018894266125, guid: 4fe27c3ca637cea4d868cbe3782e321b, type: 3}
+  whitePawn: {fileID: -8972512252776257653, guid: 88475c2efa1afa94888d4f24c18382b4, type: 3}
+  blackKing: {fileID: -1812771950295369292, guid: b51397d41d7a2014c91df38d1c93952c, type: 3}
+  blackQueen: {fileID: -5465369726009452729, guid: 0d7cc4c1107e5b54a8cc6338d7de7410, type: 3}
+  blackBishop: {fileID: 6248870970504765230, guid: 759ef8fc24bfe4547beaef51f32ede9f, type: 3}
+  blackKnight: {fileID: -187189855574930635, guid: 95b20e2c2d967cc4fb1824f7d03b4411, type: 3}
+  blackRook: {fileID: -4321630783218374125, guid: 1bcfdc688723a4242b9518a09b0d0437, type: 3}
+  blackPawn: {fileID: -1618794555232391191, guid: be2146af9e8b64e4abcc733259a374e1, type: 3}
 --- !u!1 &2029371457
 GameObject:
   m_ObjectHideFlags: 0

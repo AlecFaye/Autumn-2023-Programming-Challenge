@@ -7,31 +7,28 @@ public class Board : MonoBehaviour
 
     [SerializeField] private Material selectedMaterial;
 
-    public GameObject AddPiece(GameObject piece, int col, int row)
+    public Piece AddPiece(Piece piece, int col, int row)
     {
         Vector2Int gridPoint = Geometry.GridPoint(col, row);
-        GameObject newPiece = Instantiate(piece, Geometry.PointFromGrid(gridPoint), Quaternion.identity, gameObject.transform);
+        Piece newPiece = Instantiate(piece, Geometry.PointFromGrid(gridPoint), Quaternion.identity, gameObject.transform);
         return newPiece;
     }
 
-    public void MovePiece(GameObject piece, Vector2Int gridPoint)
+    public void MovePiece(Piece piece, Vector2Int gridPoint)
     {
         // TODO: Add animation to piece movement
         piece.transform.position = Geometry.PointFromGrid(gridPoint);
     }
 
-    public void SelectPiece(GameObject piece)
+    public void SelectPiece(Piece piece)
     {
         MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
         renderers.material = selectedMaterial;
 
-        if (piece.TryGetComponent(out Piece pieceComponent))
-        {
-            pieceComponent.PlaySelectPieceFeedback();
-        }
+        piece.PlaySelectPieceFeedback();
     }
 
-    public void DeselectPiece(GameObject piece, PlayerColour playerColour)
+    public void DeselectPiece(Piece piece, PlayerColour playerColour)
     {
         MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
 
@@ -42,9 +39,6 @@ public class Board : MonoBehaviour
             ? defaultWhiteMaterial
             : defaultBlackMaterial;
 
-        if (piece.TryGetComponent(out Piece pieceComponent))
-        {
-            pieceComponent.PlayDeselectPieceFeedback();
-        }
+        piece.PlayDeselectPieceFeedback();
     }
 }
