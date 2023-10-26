@@ -16,26 +16,22 @@ public class Board : MonoBehaviour
 
     public void MovePiece(Piece piece, Vector2Int gridPoint)
     {
-        // TODO: Add animation to piece movement
         piece.transform.position = Geometry.PointFromGrid(gridPoint);
     }
 
     public void SelectPiece(Piece piece)
     {
-        MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
-        renderers.material = selectedMaterial;
+        piece.MeshRenderer.material = selectedMaterial;
 
         piece.PlaySelectPieceFeedback();
     }
 
     public void DeselectPiece(Piece piece, PlayerColour playerColour)
     {
-        MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
-
-        if (renderers == null)
+        if (piece.MeshRenderer == null)
             return;
 
-        renderers.material = playerColour == PlayerColour.White
+        piece.MeshRenderer.material = playerColour == PlayerColour.White
             ? defaultWhiteMaterial
             : defaultBlackMaterial;
 

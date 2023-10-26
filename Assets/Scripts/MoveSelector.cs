@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MoveSelector : MonoBehaviour
 {
+    public static MoveSelector Instance { get; private set; }
+
     [Header("Tile Colour Prefabs")]
     [SerializeField] private GameObject moveLocationPrefab;
     [SerializeField] private GameObject tileHighlightPrefab;
@@ -18,9 +20,19 @@ public class MoveSelector : MonoBehaviour
     private List<Vector2Int> moveLocations;
     private List<GameObject> locationHighlights;
 
+    private CaptureType captureType = CaptureType.Neutral;
+
+    #region Pipeline Functions
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         enabled = false;
+
         tileHighlight = Instantiate(tileHighlightPrefab, Geometry.PointFromGrid(new Vector2Int(0, 0)), Quaternion.identity, gameObject.transform);
         tileHighlight.SetActive(false);
     }
@@ -34,10 +46,7 @@ public class MoveSelector : MonoBehaviour
             Vector3 point = hit.point;
             Vector2Int gridPoint = Geometry.GridFromPoint(point);
 
-            tileHighlight.SetActive(true);
-            tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
-
-            CaptureType captureType = CaptureType.Neutral;
+            HighlightTile(gridPoint);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -46,25 +55,19 @@ public class MoveSelector : MonoBehaviour
                     return;
                 }
 
-                if (ChessGameManager.Instance.PieceAtGrid(gridPoint) == null)
-                {
-                    ChessGameManager.Instance.Move(movingPiece, gridPoint);
+                captureType = CaptureType.Neutral;
+                bool isOnlyMovingPiece = ChessGameManager.Instance.PieceAtGrid(gridPoint) == null;
 
-                    if (normalMovementFeedback != null)
-                    {
-                        normalMovementFeedback.PlayFeedbacks();
-                    }    
+                if (isOnlyMovingPiece)
+                {
+                    MovePiece(gridPoint);
                 }
                 else
                 {
-                    captureType = ChessGameManager.Instance.CapturePieceAt(movingPiece, gridPoint);
-                    
-                    if (captureType == CaptureType.Strong || captureType == CaptureType.Neutral)
-                    {
-                        ChessGameManager.Instance.Move(movingPiece, gridPoint);
-                    }
+                    CapturePiece(gridPoint);
                 }
-                ExitState(captureType == CaptureType.Strong);
+
+                ExitState();
             }
         }
         else
@@ -78,6 +81,34 @@ public class MoveSelector : MonoBehaviour
         }
     }
 
+    #endregion
+
+    private void HighlightTile(Vector2Int gridPoint)
+    {
+        tileHighlight.SetActive(true);
+        tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
+    }
+
+    private void MovePiece(Vector2Int gridPoint)
+    {
+        ChessGameManager.Instance.Move(movingPiece, gridPoint);
+
+        if (normalMovementFeedback != null)
+        {
+            normalMovementFeedback.PlayFeedbacks();
+        }
+    }
+
+    private void CapturePiece(Vector2Int gridPoint)
+    {
+        captureType = ChessGameManager.Instance.CapturePieceAt(movingPiece, gridPoint);
+
+        if (captureType == CaptureType.Strong || captureType == CaptureType.Neutral)
+        {
+            ChessGameManager.Instance.Move(movingPiece, gridPoint);
+        }
+    }
+
     private void CancelMove()
     {
         enabled = false;
@@ -88,15 +119,15 @@ public class MoveSelector : MonoBehaviour
         }
 
         tileHighlight.SetActive(false);
+
         ChessGameManager.Instance.DeselectPiece(movingPiece);
-        TileSelector selector = GetComponent<TileSelector>();
-        selector.EnterState();
+        TileSelector.Instance.EnterState();
     }
 
     public void EnterState(Piece piece)
     {
-        movingPiece = piece;
         enabled = true;
+        movingPiece = piece;
 
         moveLocations = ChessGameManager.Instance.MovesForPiece(movingPiece);
         locationHighlights = new List<GameObject>();
@@ -106,35 +137,33 @@ public class MoveSelector : MonoBehaviour
             CancelMove();
         }
 
-        foreach (Vector2Int loc in moveLocations)
+        foreach (Vector2Int moveLocation in moveLocations)
         {
-            GameObject highlight;
-            if (ChessGameManager.Instance.PieceAtGrid(loc))
-            {
-                highlight = Instantiate(attackLocationPrefab, Geometry.PointFromGrid(loc), Quaternion.identity, gameObject.transform);
-            }
-            else
-            {
-                highlight = Instantiate(moveLocationPrefab, Geometry.PointFromGrid(loc), Quaternion.identity, gameObject.transform);
-            }
+            GameObject highlightPrefab = ChessGameManager.Instance.PieceAtGrid(moveLocation)
+                ? attackLocationPrefab
+                : moveLocationPrefab;
+
+            GameObject highlight = Instantiate(highlightPrefab, Geometry.PointFromGrid(moveLocation), Quaternion.identity, gameObject.transform);
+
             locationHighlights.Add(highlight);
         }
     }
 
-    private void ExitState(bool canGoAgain)
+    private void ExitState()
     {
         enabled = false;
         tileHighlight.SetActive(false);
 
-        TileSelector selector = GetComponent<TileSelector>();
         ChessGameManager.Instance.DeselectPiece(movingPiece);
         
         movingPiece = null;
         
-        if (!canGoAgain)
+        if (captureType != CaptureType.Strong)
+        {
             ChessGameManager.Instance.NextPlayer();
+        }
 
-        selector.EnterState();
+        TileSelector.Instance.EnterState();
         
         foreach (GameObject highlight in locationHighlights)
         {

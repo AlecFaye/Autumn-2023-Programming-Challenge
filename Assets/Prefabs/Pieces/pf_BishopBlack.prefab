@@ -48,10 +48,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PieceType: 0
   elementMaterialIdentifier: {fileID: 628354357649726878}
-  vfxElementManager: {fileID: 0}
   selectPieceFeedback: {fileID: 1236645925475520786}
   deselectPieceFeedback: {fileID: 5694812818264966305}
   destroyPieceFeedback: {fileID: 7040720792770558579}
+  meshRenderer: {fileID: 7676421773987338683}
 --- !u!1001 &6198241015854270133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2161,6 +2161,11 @@ PrefabInstance:
       addedObject: {fileID: 1824965788520505108}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a8b7cc9ea10c344db15ecb7d1b0b9c7, type: 3}
+--- !u!23 &7676421773987338683 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 23631250503494802, guid: 4a8b7cc9ea10c344db15ecb7d1b0b9c7, type: 3}
+  m_PrefabInstance: {fileID: 7699981710834611497}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7698269546771337917 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4059174729050004, guid: 4a8b7cc9ea10c344db15ecb7d1b0b9c7, type: 3}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Geometry : MonoBehaviour
+public static class Geometry
 {
     public static Vector3 PointFromGrid(Vector2Int gridPoint)
     {

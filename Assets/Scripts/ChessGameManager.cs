@@ -127,7 +127,9 @@ public class ChessGameManager : MonoBehaviour
     public void Move(Piece piece, Vector2Int gridPoint)
     {
         if (piece == null)
+        {
             return;
+        }
 
         if (piece.PieceType == PieceType.Pawn && !HasPieceMoved(piece))
         {
