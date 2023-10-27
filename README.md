@@ -1,6 +1,7 @@
 # Games Job Fair Autumn 2023 - Unity Programming Challenge
-Create a game that puts a new twist on a classic concept. You can recreate a classic game with a new twist, or put a classic twist on a classic game form (i.e. platformer, puzzle, rpg).
 
-The game must:
-- Have some kind of UI that displays information pertinent to the player experience (health, score, level whatever fits).
-- Have a complete gameplay loop (running, game over)
+This game was created for the Games Job Fair Autumn 2023 Programming Challenge. The theme was taking a classic game and adding a twist. 
+
+I took the classic game chess and added a rock, paper, scissors element to the game. If you beat a piece with the right element, you can go again. If you bear a piece with the wrong element, you lose your piece as well. 
+
+Note: You play for both sides. I did not have time to implement an AI to play the other side. 
