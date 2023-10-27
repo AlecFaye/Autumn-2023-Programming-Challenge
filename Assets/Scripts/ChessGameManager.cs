@@ -15,23 +15,23 @@ public class ChessGameManager : MonoBehaviour
     [SerializeField] private Board board;
 
     [Header("White Pieces")]
-    [SerializeField] private GameObject whiteKing;
-    [SerializeField] private GameObject whiteQueen;
-    [SerializeField] private GameObject whiteBishop;
-    [SerializeField] private GameObject whiteKnight;
-    [SerializeField] private GameObject whiteRook;
-    [SerializeField] private GameObject whitePawn;
+    [SerializeField] private Piece whiteKing;
+    [SerializeField] private Piece whiteQueen;
+    [SerializeField] private Piece whiteBishop;
+    [SerializeField] private Piece whiteKnight;
+    [SerializeField] private Piece whiteRook;
+    [SerializeField] private Piece whitePawn;
 
     [Header("Black Pieces")]
-    [SerializeField] private GameObject blackKing;
-    [SerializeField] private GameObject blackQueen;
-    [SerializeField] private GameObject blackBishop;
-    [SerializeField] private GameObject blackKnight;
-    [SerializeField] private GameObject blackRook;
-    [SerializeField] private GameObject blackPawn;
+    [SerializeField] private Piece blackKing;
+    [SerializeField] private Piece blackQueen;
+    [SerializeField] private Piece blackBishop;
+    [SerializeField] private Piece blackKnight;
+    [SerializeField] private Piece blackRook;
+    [SerializeField] private Piece blackPawn;
 
-    private GameObject[,] pieces;
-    private List<GameObject> movedPieces;
+    private Piece[,] pieces;
+    private List<Piece> movedPieces;
 
     private Player white;
     private Player black;
@@ -67,8 +67,8 @@ public class ChessGameManager : MonoBehaviour
 
     private void InitPieces()
     {
-        pieces = new GameObject[8, 8];
-        movedPieces = new List<GameObject>();
+        pieces = new Piece[8, 8];
+        movedPieces = new List<Piece>();
 
         AddPiece(whiteRook, white, 0, 0);
         AddPiece(whiteKnight, white, 1, 0);
@@ -103,36 +103,35 @@ public class ChessGameManager : MonoBehaviour
 
     #region Movement Functions
 
-    public void SelectPiece(GameObject piece)
+    public void SelectPiece(Piece piece)
     {
         board.SelectPiece(piece);
     }
 
-    public void DeselectPiece(GameObject piece)
+    public void DeselectPiece(Piece piece)
     {
         board.DeselectPiece(piece, CurrentPlayer.PlayerColour);
     }
 
-    public List<Vector2Int> MovesForPiece(GameObject pieceObject)
+    public List<Vector2Int> MovesForPiece(Piece piece)
     {
-        Piece piece = pieceObject.GetComponent<Piece>();
-        Vector2Int gridPoint = GridForPiece(pieceObject);
+        Vector2Int gridPoint = GridForPiece(piece);
         List<Vector2Int> locations = piece.MoveLocations(gridPoint);
 
         locations.RemoveAll(gp => gp.x < 0 || gp.x > 7 || gp.y < 0 || gp.y > 7);
-
         locations.RemoveAll(gp => FriendlyPieceAt(gp));
 
         return locations;
     }
 
-    public void Move(GameObject piece, Vector2Int gridPoint)
+    public void Move(Piece piece, Vector2Int gridPoint)
     {
         if (piece == null)
+        {
             return;
+        }
 
-        Piece pieceComponent = piece.GetComponent<Piece>();
-        if (pieceComponent.PieceType == PieceType.Pawn && !HasPieceMoved(piece))
+        if (piece.PieceType == PieceType.Pawn && !HasPieceMoved(piece))
         {
             movedPieces.Add(piece);
         }
@@ -140,7 +139,7 @@ public class ChessGameManager : MonoBehaviour
         Vector2Int startGridPoint = GridForPiece(piece);
         pieces[startGridPoint.x, startGridPoint.y] = null;
 
-        if (pieceComponent.PieceType == PieceType.Pawn
+        if (piece.PieceType == PieceType.Pawn
             && ((CurrentPlayer.PlayerColour == PlayerColour.White && gridPoint.y == 7)
             || (CurrentPlayer.PlayerColour == PlayerColour.Black && gridPoint.y == 0)))
         {
@@ -159,45 +158,42 @@ public class ChessGameManager : MonoBehaviour
         }
     }
 
-    public bool HasPieceMoved(GameObject piece)
+    public bool HasPieceMoved(Piece piece)
     {
         return movedPieces.Contains(piece);
     }
 
-    public CaptureType CapturePieceAt(GameObject movingPiece, Vector2Int gridPoint)
+    public CaptureType CapturePieceAt(Piece movingPiece, Vector2Int gridPoint)
     {
-        GameObject pieceToCapture = PieceAtGrid(gridPoint);
+        Piece pieceToCapture = PieceAtGrid(gridPoint);
         
-        Piece movedPiece = movingPiece.GetComponent<Piece>();
-        Piece capturedPiece = pieceToCapture.GetComponent<Piece>();
-
-        if (movedPiece.PieceElement.IsStrongAgainst(capturedPiece.PieceElement.ElementType))
+        if (movingPiece.PieceElement.IsStrongAgainst(pieceToCapture.PieceElement.ElementType))
         {
             CurrentPlayer.CapturedPieces.Add(pieceToCapture);
             pieces[gridPoint.x, gridPoint.y] = null;
 
-            movedPiece.PlayElementalFeedback();
-            capturedPiece.PlayDestroyPieceFeedback();
+            movingPiece.PlayElementalFeedback();
+            pieceToCapture.PlayDestroyPieceFeedback();
             StrengthFeedbackManager.Instance.PlayStrongFeedback();
 
-            CheckKingCapture(capturedPiece);
+            CheckKingCapture(pieceToCapture);
 
             return CaptureType.Strong;
         }
-        else if (movedPiece.PieceElement.IsWeakAgainst(capturedPiece.PieceElement.ElementType))
+        else if (movingPiece.PieceElement.IsWeakAgainst(pieceToCapture.PieceElement.ElementType))
         {
             OtherPlayer.CapturedPieces.Add(movingPiece);
             CurrentPlayer.CapturedPieces.Add(pieceToCapture);
 
             pieces[gridPoint.x, gridPoint.y] = null;
 
-            movedPiece.PlayElementalFeedback();
-            movedPiece.PlayDestroyPieceFeedback();
-            capturedPiece.PlayDestroyPieceFeedback();
+            movingPiece.PlayElementalFeedback();
+            movingPiece.PlayDestroyPieceFeedback();
+            pieceToCapture.PlayDestroyPieceFeedback();
             StrengthFeedbackManager.Instance.PlayWeakFeedback();
 
-            CheckKingCapture(capturedPiece);
-            CheckKingCapture(movedPiece);
+            CheckKingCapture(pieceToCapture);
+            CheckKingCapture(movingPiece);
 
             return CaptureType.Weak;
         }
@@ -206,11 +202,11 @@ public class ChessGameManager : MonoBehaviour
             CurrentPlayer.CapturedPieces.Add(pieceToCapture);
             pieces[gridPoint.x, gridPoint.y] = null;
 
-            movedPiece.PlayElementalFeedback();
-            capturedPiece.PlayDestroyPieceFeedback();
+            movingPiece.PlayElementalFeedback();
+            pieceToCapture.PlayDestroyPieceFeedback();
             StrengthFeedbackManager.Instance.PlayNeutralFeedback();
 
-            CheckKingCapture(capturedPiece);
+            CheckKingCapture(pieceToCapture);
 
             return CaptureType.Neutral;
         }
@@ -220,12 +216,12 @@ public class ChessGameManager : MonoBehaviour
 
     #region Helper Functions
 
-    public bool DoesPieceBelongToCurrentPlayer(GameObject piece)
+    public bool DoesPieceBelongToCurrentPlayer(Piece piece)
     {
         return CurrentPlayer.Pieces.Contains(piece);
     }
 
-    public GameObject PieceAtGrid(Vector2Int gridPoint)
+    public Piece PieceAtGrid(Vector2Int gridPoint)
     {
         if (gridPoint.x > 7 || gridPoint.y > 7 || gridPoint.x < 0 || gridPoint.y < 0)
         {
@@ -234,7 +230,7 @@ public class ChessGameManager : MonoBehaviour
         return pieces[gridPoint.x, gridPoint.y];
     }
 
-    public Vector2Int GridForPiece(GameObject piece)
+    public Vector2Int GridForPiece(Piece piece)
     {
         for (int i = 0; i < 8; i++)
         {
@@ -268,16 +264,16 @@ public class ChessGameManager : MonoBehaviour
         }
     }
 
-    private void AddPiece(GameObject prefab, Player player, int col, int row)
+    private void AddPiece(Piece prefab, Player player, int col, int row)
     {
-        GameObject pieceObject = board.AddPiece(prefab, col, row);
+        Piece pieceObject = board.AddPiece(prefab, col, row);
         player.Pieces.Add(pieceObject);
         pieces[col, row] = pieceObject;
     }
 
     private bool FriendlyPieceAt(Vector2Int gridPoint)
     {
-        GameObject piece = PieceAtGrid(gridPoint);
+        Piece piece = PieceAtGrid(gridPoint);
 
         if (piece == null)
         {

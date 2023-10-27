@@ -49,10 +49,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PieceType: 0
   elementMaterialIdentifier: {fileID: 3028489359365013316}
-  vfxElementManager: {fileID: 487583894769313932}
   selectPieceFeedback: {fileID: 7985795437084794469}
   deselectPieceFeedback: {fileID: 3526958821547084758}
   destroyPieceFeedback: {fileID: 2184217268738815236}
+  meshRenderer: {fileID: 6726448383213823643}
 --- !u!1001 &2604638546998917877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -198,17 +198,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6dbc22074235354c900a1904b28bc06, type: 3}
---- !u!114 &487583894769313932 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2513490235875512953, guid: d6dbc22074235354c900a1904b28bc06, type: 3}
-  m_PrefabInstance: {fileID: 2604638546998917877}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 331441283376a4343a3df8c58b77be80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1317010552323111759 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3919115652727570874, guid: d6dbc22074235354c900a1904b28bc06, type: 3}

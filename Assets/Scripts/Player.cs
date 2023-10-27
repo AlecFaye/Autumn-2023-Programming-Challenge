@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public enum PlayerColour
 {
@@ -9,8 +8,8 @@ public enum PlayerColour
 
 public class Player
 {
-    public List<GameObject> Pieces;
-    public List<GameObject> CapturedPieces;
+    public List<Piece> Pieces;
+    public List<Piece> CapturedPieces;
 
     public string PlayerName;
     public int Forward;

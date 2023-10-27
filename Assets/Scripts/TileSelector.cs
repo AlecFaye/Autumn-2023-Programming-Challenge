@@ -2,11 +2,18 @@ using UnityEngine;
 
 public class TileSelector : MonoBehaviour
 {
+    public static TileSelector Instance { get; private set; }
+
     [SerializeField] private GameObject tileHighlightPrefab;
 
     private GameObject tileHighlight;
 
     #region Pipeline Functions
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -40,9 +47,10 @@ public class TileSelector : MonoBehaviour
 
             tileHighlight.SetActive(true);
             tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
+
             if (Input.GetMouseButtonDown(0))
             {
-                GameObject selectedPiece = ChessGameManager.Instance.PieceAtGrid(gridPoint);
+                Piece selectedPiece = ChessGameManager.Instance.PieceAtGrid(gridPoint);
                 if (ChessGameManager.Instance.DoesPieceBelongToCurrentPlayer(selectedPiece))
                 {
                     ChessGameManager.Instance.SelectPiece(selectedPiece);
@@ -61,11 +69,11 @@ public class TileSelector : MonoBehaviour
         enabled = true;
     }
 
-    private void ExitState(GameObject movingPiece)
+    private void ExitState(Piece movingPiece)
     {
         enabled = false;
         tileHighlight.SetActive(false);
-        MoveSelector move = GetComponent<MoveSelector>();
-        move.EnterState(movingPiece);
+
+        MoveSelector.Instance.EnterState(movingPiece);
     }
 }
